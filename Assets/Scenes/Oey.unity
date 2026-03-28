@@ -21598,7 +21598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08090b01602aed0439ea46b0f60b16a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneExit
-  sceneName: Pun
+  sceneName: Sho
 --- !u!61 &2123025742
 BoxCollider2D:
   m_ObjectHideFlags: 0
