@@ -80,7 +80,7 @@ namespace Platformer
         {
             if (other.gameObject.tag == "Enemy")
             {
-                deathState = true; // Say to GameManager that player is dead
+                deathState = true; // Say to GameManager that player is dead   
             }
             else
             {
