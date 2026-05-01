@@ -9,8 +9,8 @@ namespace Platformer
         public float movingSpeed;
         public float jumpForce;
         private float moveInput;
-
         private bool facingRight = false;
+
         [HideInInspector]
         public bool deathState = false;
 
@@ -21,11 +21,17 @@ namespace Platformer
         private Animator animator;
         private GameManager gameManager;
 
+        // Sound Effects
+        public AudioClip jumpSound;
+        public AudioClip coinSound;
+        private AudioSource audioSource;
+
         void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void FixedUpdate()
@@ -35,7 +41,7 @@ namespace Platformer
 
         void Update()
         {
-            if (Input.GetButton("Horizontal")) 
+            if (Input.GetButton("Horizontal"))
             {
                 moveInput = Input.GetAxis("Horizontal");
                 Vector3 direction = transform.right * moveInput;
@@ -46,17 +52,21 @@ namespace Platformer
             {
                 if (isGrounded) animator.SetInteger("playerState", 0); // Turn on idle animation
             }
-            if(Input.GetKeyDown(KeyCode.Space) && isGrounded )
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
                 rigidbody.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+                // Play jump sound
+                PlaySound(jumpSound);
             }
-            if (!isGrounded)animator.SetInteger("playerState", 2); // Turn on jump animation
 
-            if(facingRight == false && moveInput > 0)
+            if (!isGrounded) animator.SetInteger("playerState", 2); // Turn on jump animation
+
+            if (facingRight == false && moveInput > 0)
             {
                 Flip();
             }
-            else if(facingRight == true && moveInput < 0)
+            else if (facingRight == true && moveInput < 0)
             {
                 Flip();
             }
@@ -93,7 +103,18 @@ namespace Platformer
             if (other.gameObject.tag == "Coin")
             {
                 gameManager.coinsCounter += 1;
+                // Play coin sound
+                PlaySound(coinSound);
                 Destroy(other.gameObject);
+            }
+        }
+
+        // Play sound effect
+        private void PlaySound(AudioClip clip)
+        {
+            if (clip != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(clip);
             }
         }
     }
