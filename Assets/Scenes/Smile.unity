@@ -22053,7 +22053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ToggleObjectOnHit
   targetObject: {fileID: 689936075}
   activeTime: 2
-  inactiveTime: 2
+  inactiveTime: 5
   loopCount: 10
 --- !u!61 &1610085175
 BoxCollider2D:
@@ -22901,7 +22901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ToggleObjectOnHit
   targetObject: {fileID: 1773028431}
   activeTime: 2
-  inactiveTime: 2
+  inactiveTime: 5
   loopCount: 10
 --- !u!61 &2045791658
 BoxCollider2D:

@@ -38,11 +38,22 @@ namespace Platformer
 
         string GetRank(float seconds)
         {
-            if (seconds < 30f) return "S  - Speedrunner!";
-            if (seconds < 60f) return "A  - Amazing!";
-            if (seconds < 120f) return "B  - Good Job!";
-            if (seconds < 180f) return "C  - Not Bad!";
+            if (seconds < 1201f) return "S  - Speedrunner!";
+            if (seconds < 1401f) return "A  - Amazing!";
+            if (seconds < 1601f) return "B  - Good Job!";
+            if (seconds < 1801f) return "C  - Not Bad!";
             return "D  - Keep Trying!";
+        }
+
+        public void ExitGame()
+        {
+            Debug.Log("Exiting game...");
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
         }
     }
 }
