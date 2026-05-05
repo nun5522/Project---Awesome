@@ -26,12 +26,14 @@ namespace Platformer
         public AudioClip coinSound;
         private AudioSource audioSource;
 
+
         void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             audioSource = GetComponent<AudioSource>();
+            
         }
 
         private void FixedUpdate()
@@ -90,7 +92,12 @@ namespace Platformer
         {
             if (other.gameObject.tag == "Enemy")
             {
-                deathState = true; // Say to GameManager that player is dead   
+                deathState = true; // Say to GameManager that player is dead
+
+                // บอกว่าตายจริง ๆ ก่อน Destroy
+                PlayerDeathMarker marker = GetComponent<PlayerDeathMarker>();
+                if (marker != null)
+                    marker.TriggerDeath();
             }
             else
             {

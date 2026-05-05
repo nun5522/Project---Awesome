@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6952628394585513908}
   - component: {fileID: 6952628394585513800}
   - component: {fileID: -5842291122310449723}
+  - component: {fileID: 1833603085293927570}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -307,6 +308,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1833603085293927570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952628394585513906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0571f4d627bd334ea31dc4a8f8c1df3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Platformer.PlayerDeathMarker
+  deathPrefab: {fileID: 1904219114179032792, guid: 8db673c950521e747a51e4865ed99d19, type: 3}
+  ghostAlpha: 0.5
 --- !u!1 &6952628394686255623
 GameObject:
   m_ObjectHideFlags: 0
