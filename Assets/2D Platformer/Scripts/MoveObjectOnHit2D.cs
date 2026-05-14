@@ -13,6 +13,7 @@ public class MoveObjectOnHit2D : MonoBehaviour
     public float delayBeforeMove = 2f;
 
     private bool isMoving = false;
+    private bool hasTriggered = false; // เพิ่มตรงนี้
     private Vector2 targetPos;
 
     void Update()
@@ -32,24 +33,24 @@ public class MoveObjectOnHit2D : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
+        if (hasTriggered) return; // ถ้าเคยทำงานแล้วหยุดเลย
+
         if (targetObject == null)
         {
             Debug.LogWarning("Target object is not assigned!");
             return;
         }
 
+        hasTriggered = true; // ล็อคไม่ให้ทำงานซ้ำ
         StartCoroutine(MoveAfterDelay());
     }
 
     IEnumerator MoveAfterDelay()
     {
         Debug.Log("Moving in " + delayBeforeMove + " seconds...");
-
         yield return new WaitForSeconds(delayBeforeMove);
-
         targetPos = (Vector2)targetObject.transform.position + moveDirection.normalized * moveDistance;
         isMoving = true;
-
         Debug.Log("Moving: " + targetObject.name);
     }
 }

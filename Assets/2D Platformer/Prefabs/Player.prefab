@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0571f4d627bd334ea31dc4a8f8c1df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Platformer.PlayerDeathMarker
-  deathPrefab: {fileID: 1904219114179032792, guid: 8db673c950521e747a51e4865ed99d19, type: 3}
+  deathPrefab: {fileID: 1904219114179032792, guid: 798a6396cbec6cc4bbf4c6447558fad6, type: 3}
   ghostAlpha: 0.5
 --- !u!1 &6952628394686255623
 GameObject:

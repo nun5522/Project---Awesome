@@ -14,27 +14,28 @@ namespace Platformer
         public GameObject deathPlayerPrefab;
         public Text coinText;
 
-        // Sound Effects
+        private Vector3 respawnPoint;
+
         public AudioClip deathSound;
         public AudioClip backgroundMusic;
 
-        // Separate Audio Sources
-        private AudioSource bgmAudioSource;      // For background music
-        private AudioSource sfxAudioSource;      // For sound effects
+        private AudioSource bgmAudioSource;
+        private AudioSource sfxAudioSource;
 
         [Range(0f, 1f)]
-        public float bgmVolume = 0.3f;           // BGM volume control (adjustable in inspector)
+        public float bgmVolume = 0.3f;
         [Range(0f, 1f)]
-        public float sfxVolume = 1f;             // SFX volume control
+        public float sfxVolume = 1f;
 
         void Start()
         {
             player = GameObject.Find("Player").GetComponent<PlayerController>();
 
-            // Setup Audio Sources
+            // จำตำแหน่งเริ่มต้นไว้เป็น Respawn Point
+            respawnPoint = playerGameObject.transform.position;
+
             SetupAudioSources();
 
-            // Play background music on loop
             if (backgroundMusic != null && bgmAudioSource != null)
             {
                 bgmAudioSource.clip = backgroundMusic;
@@ -47,29 +48,48 @@ namespace Platformer
         void Update()
         {
             coinText.text = coinsCounter.ToString();
-
-            // Allow runtime volume adjustment
             bgmAudioSource.volume = bgmVolume;
             sfxAudioSource.volume = sfxVolume;
 
             if (player.deathState == true)
             {
-                // Play death sound on SFX channel
                 PlaySound(deathSound);
 
+                // เรียก TriggerDeath ก่อน SetActive(false)
+                PlayerDeathMarker marker = playerGameObject.GetComponent<PlayerDeathMarker>();
+                if (marker != null)
+                    marker.TriggerDeath();
+
                 playerGameObject.SetActive(false);
-                GameObject deathPlayer = (GameObject)Instantiate(deathPlayerPrefab, playerGameObject.transform.position, playerGameObject.transform.rotation);
-                deathPlayer.transform.localScale = new Vector3(playerGameObject.transform.localScale.x, playerGameObject.transform.localScale.y, playerGameObject.transform.localScale.z);
+
+                GameObject deathPlayer = (GameObject)Instantiate(deathPlayerPrefab,
+                    playerGameObject.transform.position,
+                    playerGameObject.transform.rotation);
+                deathPlayer.transform.localScale = playerGameObject.transform.localScale;
+
                 player.deathState = false;
-                Invoke("ReloadLevel", 3);
+                Invoke("RespawnPlayer", 3);
             }
+        }
+
+        private void RespawnPlayer()
+        {
+            // ลบ Death Animation
+            GameObject deathAnim = GameObject.FindWithTag("DeathAnimation");
+            if (deathAnim != null) Destroy(deathAnim);
+
+            // ย้าย Player กลับจุดเริ่มต้น
+            playerGameObject.transform.position = respawnPoint;
+            playerGameObject.SetActive(true);
+
+            // Reset Player State
+            player = playerGameObject.GetComponent<PlayerController>();
+            player.deathState = false;
         }
 
         private void SetupAudioSources()
         {
-            // Get or create BGM AudioSource
             AudioSource[] sources = GetComponents<AudioSource>();
-
             if (sources.Length == 0)
             {
                 bgmAudioSource = gameObject.AddComponent<AudioSource>();
@@ -86,11 +106,8 @@ namespace Platformer
                 sfxAudioSource = sources[1];
             }
 
-            // Configure BGM
             bgmAudioSource.playOnAwake = false;
             bgmAudioSource.loop = true;
-
-            // Configure SFX
             sfxAudioSource.playOnAwake = false;
             sfxAudioSource.loop = false;
         }
@@ -100,13 +117,10 @@ namespace Platformer
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        // Play sound effect on SFX channel
         private void PlaySound(AudioClip clip)
         {
             if (clip != null && sfxAudioSource != null)
-            {
                 sfxAudioSource.PlayOneShot(clip);
-            }
         }
     }
 }

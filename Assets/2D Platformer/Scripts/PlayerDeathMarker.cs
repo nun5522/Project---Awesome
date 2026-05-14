@@ -20,22 +20,19 @@ namespace Platformer
             isDead = true;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             if (!isDead) return;
             if (deathPrefab == null) return;
 
+            markers.RemoveAll(m => m == null);
+
             GameObject marker = Instantiate(deathPrefab, transform.position, Quaternion.identity);
 
-            // ไม่ให้หายตอน Scene โหลดใหม่
-            DontDestroyOnLoad(marker);
-
-            // หยุดไม่ให้ตก
             Rigidbody2D rb = marker.GetComponent<Rigidbody2D>();
             if (rb != null)
                 rb.bodyType = RigidbodyType2D.Static;
 
-            // ให้ Player เดินทะลุได้
             Collider2D playerCol = GetComponent<Collider2D>();
             foreach (Collider2D col in marker.GetComponentsInChildren<Collider2D>())
             {
@@ -43,7 +40,6 @@ namespace Platformer
                     Physics2D.IgnoreCollision(col, playerCol, true);
             }
 
-            // โปร่งแสง
             foreach (SpriteRenderer sr in marker.GetComponentsInChildren<SpriteRenderer>())
             {
                 Color c = sr.color;
@@ -54,13 +50,15 @@ namespace Platformer
             markers.Add(marker);
             Debug.Log("Marker added! Total: " + markers.Count);
 
-            // เก็บแค่ 2 อันล่าสุด
             while (markers.Count > 2)
             {
                 if (markers[0] != null)
                     Destroy(markers[0]);
                 markers.RemoveAt(0);
             }
+
+            // Reset สำหรับการตายครั้งต่อไป
+            isDead = false;
         }
 
         public static void ClearMarkers()
